@@ -1,4 +1,4 @@
-function HTMLActuator() {
+﻿function HTMLActuator() {
   this.tileContainer    = document.querySelector(".tile-container");
   this.scoreContainer   = document.querySelector(".score-container");
   this.bestContainer    = document.querySelector(".best-container");
@@ -52,24 +52,50 @@ HTMLActuator.prototype.clearContainer = function (container) {
 };
 
 HTMLActuator.prototype.addTile = function (tile) {
-  var text = new Array();
-  text[1] = "龙少"
-  text[2] = "修几"
-  text[3] = "汪汪"
-  text[4] = "幼芽"
-  text[5] = "骆驼"
-  text[6] = "农民"
-  text[7] = "雫雫"
-  text[8] = "医生"
-  text[9] = "大树"
-  text[10] = "贝姆"
-  text[11] = "龙老师"
- 
+  var text = = document.createElement("div");
+  inner.classList.add("tile-inner");
+    switch (tile.value) {
+    case 2:
+      inner.textContent = "龙少";
+      break;
+    case 4:
+      inner.textContent = "修几";
+      break;
+    case 8:
+      inner.textContent = "汪汪";
+      break;
+    case 16:
+      inner.textContent = "幼芽";
+      break;
+    case 32:
+      inner.textContent = "骆驼";
+      break;
+    case 64:
+      inner.textContent = "农民";
+      break;
+    case 128:
+      inner.textContent = "雫雫";
+      break;
+    case 256:
+      inner.textContent = "医生";
+      break;
+    case 512:
+      inner.textContent = "大树";
+      break;
+    case 1024:
+      inner.textContent = "贝姆";
+      break;
+    case 2048:
+      inner.textContent = "龙老师";
+      break;
+    case 4096:
+      inner.textContent = "";
+      break;
+    }
   var self = this;
   var text2 = function (n) { var r = 0; while (n > 1) r++, n >>= 1; return r; }
 
   var wrapper   = document.createElement("div");
-  var inner     = document.createElement("div");
   var position  = tile.previousPosition || { x: tile.x, y: tile.y };
   var positionClass = this.positionClass(position);
 
@@ -182,13 +208,13 @@ HTMLActuator.prototype.scoreTweetButton = function () {
   var tweet = document.createElement("a");
   tweet.classList.add("twitter-share-button");
   tweet.setAttribute("href", "https://twitter.com/share");
-  tweet.setAttribute("data-via", "aenonsun");
-  tweet.setAttribute("data-url", "http://aenon.github.io/Kame");
-  tweet.setAttribute("data-counturl", "http://aenon.github.io/Kame");
+  tweet.setAttribute("data-via", "oprilzeng");
+  tweet.setAttribute("data-url", "http://oprilzeng.github.io/2048");
+  tweet.setAttribute("data-counturl", "http://oprilzeng.github.io/2048/");
   tweet.textContent = "Tweet";
 
-  var text = "I scored " + this.score + " points at life, a game where you " +
-             "join ranks of biological classifications to score high! #Kame_class_game";
+  var text = "I scored " + this.score + " points at PRC2048, a game where you " +
+             "join numbers to score high! #PRC2048";
   tweet.setAttribute("data-text", text);
 
   return tweet;
