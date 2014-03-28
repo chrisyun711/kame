@@ -94,7 +94,7 @@ HTMLActuator.prototype.addTile = function (tile) {
     }
   var self = this;
   var text2 = function (n) { var r = 0; while (n > 1) r++, n >>= 1; return r; }
-
+  var inner     = document.createElement("div");
   var wrapper   = document.createElement("div");
   var position  = tile.previousPosition || { x: tile.x, y: tile.y };
   var positionClass = this.positionClass(position);
