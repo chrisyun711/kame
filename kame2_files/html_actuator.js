@@ -84,7 +84,7 @@ HTMLActuator.prototype.addTile = function (tile) {
       inner.innerHTML = '<img src="'+inner.textContent+'" class="tile-inner"/>';
     }
     inner.style.fontSize = (1/inner.textContent.length * 90)+ 'px';
-    inner.style.fontFamily = '黑体';
+    inner.style.fontFamily = '';
     inner.style.overflow = 'hidden';
   }
   //Adaption Close
