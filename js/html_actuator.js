@@ -52,7 +52,7 @@ HTMLActuator.prototype.clearContainer = function (container) {
 };
 
 HTMLActuator.prototype.addTile = function (tile) {
-  var text = = document.createElement("div");
+ 
   inner.classList.add("tile-inner");
     switch (tile.value) {
     case 2:
