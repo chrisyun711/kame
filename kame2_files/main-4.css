@@ -93,14 +93,14 @@ h1.title {
     animation-fill-mode: both; }
 
 .score-container:after {
-  content: "Score"; }
+  content: "咩咩"; }
 
 .best-container:after {
   content: "Best"; }
 
 p {
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   line-height: 1.65; }
 
 a {
