@@ -1,167 +1,162 @@
-function HTMLActuator() {
-  this.tileContainer    = document.querySelector(".tile-container");
-  this.scoreContainer   = document.querySelector(".score-container");
-  this.bestContainer    = document.querySelector(".best-container");
-  this.messageContainer = document.querySelector(".game-message");
-
-  this.score = 0;
-}
-
-HTMLActuator.prototype.actuate = function (grid, metadata) {
-  var self = this;
-
-  window.requestAnimationFrame(function () {
-    self.clearContainer(self.tileContainer);
-
-    grid.cells.forEach(function (column) {
-      column.forEach(function (cell) {
-        if (cell) {
-          self.addTile(cell);
+window.requestAnimationFrame(function () {
+  var maxValue = 4;
+  var game = new GameManager(4, KeyboardInputManager, HTMLActuator, LocalScoreManager);
+  game.move = function (direction) {
+    var self = this;
+    if (this.over || this.won) return;
+    var cell, tile;
+    var vector     = this.getVector(direction);
+    var traversals = this.buildTraversals(vector);
+    var moved      = false;
+    this.prepareTiles();
+    traversals.x.forEach(function (x) {
+      traversals.y.forEach(function (y) {
+        cell = { x: x, y: y };
+        tile = self.grid.cellContent(cell);
+        if (tile) {
+          var positions = self.findFarthestPosition(cell, vector);
+          var next      = self.grid.cellContent(positions.next);
+          if (next && !next.mergedFrom && next.value === tile.value) {
+            var merged = new Tile(positions.next, tile.value + next.value);
+            merged.mergedFrom = [tile, next];
+            self.grid.insertTile(merged);
+            self.grid.removeTile(tile);
+            tile.updatePosition(positions.next);
+            self.score += merged.value;
+            if (merged.value > maxValue) {
+              maxValue = merged.value;
+            }
+            if (merged.value === 4096) self.won = true;
+          } else {
+            self.moveTile(tile, positions.farthest);
+          }
+          if (!self.positionsEqual(cell, tile)) {
+            moved = true; 
+          }
         }
       });
     });
-
-    self.updateScore(metadata.score);
-    self.updateBestScore(metadata.bestScore);
-
-    //Adaption Start
-    var maxScore = 0;
-    for(i in grid.cells){
-      for(j in grid.cells[i]){
-        if(grid.cells[i][j]){
-          maxScore = maxScore > grid.cells[i][j].value ? maxScore : grid.cells[i][j].value;
-        }
+    if (moved) {
+      this.addRandomTile();
+      if (!this.movesAvailable()) {
+        this.over = true; 
       }
+      this.actuate();
     }
-    //Adaption Close
-
-    if (metadata.terminated) {
-      if (metadata.over) {
-        //Adaption Start
-        //self.message(false); // You lose 
-        self.message(false, maxScore); // You lose 
-        //Adaption Close
-      } else if (metadata.won) {
-        self.message(true); // You win!
+  };
+  game.inputManager.events["move"] = [];
+  game.inputManager.on("move", game.move.bind(game));
+  game.actuator.addTile = function (tile) {
+    var self = this;
+    var wrapper   = document.createElement("div");
+    var inner     = document.createElement("div");
+    var position  = tile.previousPosition || { x: tile.x, y: tile.y };
+    positionClass = this.positionClass(position);
+    var classes = ["tile", "tile-" + tile.value, positionClass];
+    this.applyClasses(wrapper, classes);
+    inner.classList.add("tile-inner");
+    switch (tile.value) {
+    case 2:
+      inner.textContent = "龙少";
+      break;
+    case 4:
+      inner.textContent = "修几";
+      break;
+    case 8:
+      inner.textContent = "汪汪";
+      break;
+    case 16:
+      inner.textContent = "幼芽";
+      break;
+    case 32:
+      inner.textContent = "骆驼";
+      break;
+    case 64:
+      inner.textContent = "农民";
+      break;
+    case 128:
+      inner.textContent = "雫雫";
+      break;
+    case 256:
+      inner.textContent = "医生";
+      break;
+    case 512:
+      inner.textContent = "大树";
+      break;
+    case 1024:
+      inner.textContent = "贝姆";
+      break;
+    case 2048:
+      inner.textContent = "龙老师";
+      break;
+    case 4096:
+      inner.textContent = "";
+      break;
+    }
+    if (tile.previousPosition) {
+      window.requestAnimationFrame(function () {
+        classes[2] = self.positionClass({ x: tile.x, y: tile.y });
+        self.applyClasses(wrapper, classes);
+      });
+    } else if (tile.mergedFrom) {
+      classes.push("tile-merged");
+      this.applyClasses(wrapper, classes);
+      tile.mergedFrom.forEach(function (merged) {
+        self.addTile(merged);
+      });
+    } else {
+      classes.push("tile-new");
+      this.applyClasses(wrapper, classes);
+    }
+    wrapper.appendChild(inner);
+    this.tileContainer.appendChild(wrapper);
+    };
+    game.actuator.message = function (won) {
+      var type    = won ? "game-won" : "game-over";
+      var message = "";
+      switch (maxValue) {
+      case 4:
+        message = "应该没有人会死在这里吧！";
+        break;
+      case 8:
+        message = "死在这里的都是幼芽亲妈吧！";
+        break;
+      case 16:
+        message = "骆驼的Dior摸不到叻！";
+        break;
+      case 32:
+        message = "没有肉包子不开心";
+        break;
+      case 64:
+        message = "红酒配チョコ一口胖一斤";
+        break;
+      case 128:
+        message = "医生的功能磁共振排队哈长呀！";
+        break;
+      case 256:
+        message = "あ、俺俺、だから俺だよ";
+        break;
+      case 512:
+        message = "等不到情深深雨蒙蒙";
+        break;
+      case 1024:
+        message = "窥伐到龙老师细哈耶则";
+        break;
+      case 2048:
+        message = "恭喜你！223个kiss from咩咩！！";
+        break;
+      case 4096:
+        message = "咩咩223";
+        break;
       }
-    }
+      this.messageContainer.classList.add(type);
+      this.messageContainer.getElementsByTagName("p")[0].textContent = message;
+    };
+    game.restart = function () {
+      maxValue = 4;
+      this.actuator.restart();
+      this.setup();
+    };
+    game.restart();
+});
 
-  });
-};
-
-// Continues the game (both restart and keep playing)
-HTMLActuator.prototype.continueGame = function () {
-  this.clearMessage();
-};
-
-HTMLActuator.prototype.clearContainer = function (container) {
-  while (container.firstChild) {
-    container.removeChild(container.firstChild);
-  }
-};
-
-HTMLActuator.prototype.addTile = function (tile) {
-  var self = this;
-
-  var wrapper   = document.createElement("div");
-  var inner     = document.createElement("div");
-  var position  = tile.previousPosition || { x: tile.x, y: tile.y };
-  var positionClass = this.positionClass(position);
-
-  // We can't use classlist because it somehow glitches when replacing classes
-  var classes = ["tile", "tile-" + tile.value, positionClass];
-
-  if (tile.value > 2048) classes.push("tile-super");
-
-  this.applyClasses(wrapper, classes);
-
-  inner.classList.add("tile-inner");
-  inner.textContent = tile.value;
-  //Adaption Start
-  if(window.my_list){
-    inner.textContent = my_list[tile.value] || tile.value;
-    if(inner.textContent.substring(0,4)=='http'){
-      inner.innerHTML = '<img src="'+inner.textContent+'" class="tile-inner"/>';
-    }
-    inner.style.fontSize = (1/inner.textContent.length * 50)+ 'px';
-    inner.style.fontFamily = '';
-    inner.style.overflow = 'hidden';
-  }
-  //Adaption Close
-
-  if (tile.previousPosition) {
-    // Make sure that the tile gets rendered in the previous position first
-    window.requestAnimationFrame(function () {
-      classes[2] = self.positionClass({ x: tile.x, y: tile.y });
-      self.applyClasses(wrapper, classes); // Update the position
-    });
-  } else if (tile.mergedFrom) {
-    classes.push("tile-merged");
-    this.applyClasses(wrapper, classes);
-
-    // Render the tiles that merged
-    tile.mergedFrom.forEach(function (merged) {
-      self.addTile(merged);
-    });
-  } else {
-    classes.push("tile-new");
-    this.applyClasses(wrapper, classes);
-  }
-
-  // Add the inner part of the tile to the wrapper
-  wrapper.appendChild(inner);
-
-  // Put the tile on the board
-  this.tileContainer.appendChild(wrapper);
-};
-
-HTMLActuator.prototype.applyClasses = function (element, classes) {
-  element.setAttribute("class", classes.join(" "));
-};
-
-HTMLActuator.prototype.normalizePosition = function (position) {
-  return { x: position.x + 1, y: position.y + 1 };
-};
-
-HTMLActuator.prototype.positionClass = function (position) {
-  position = this.normalizePosition(position);
-  return "tile-position-" + position.x + "-" + position.y;
-};
-
-HTMLActuator.prototype.updateScore = function (score) {
-  this.clearContainer(this.scoreContainer);
-
-  var difference = score - this.score;
-  this.score = score;
-
-  this.scoreContainer.textContent = this.score;
-
-  if (difference > 0) {
-    var addition = document.createElement("div");
-    addition.classList.add("score-addition");
-    addition.textContent = "+" + difference;
-
-    this.scoreContainer.appendChild(addition);
-  }
-};
-
-HTMLActuator.prototype.updateBestScore = function (bestScore) {
-  this.bestContainer.textContent = bestScore;
-};
-
-HTMLActuator.prototype.message = function (won, score) {
-  var type    = won ? "game-won" : "game-over";
-  //Adaption Start
-  //var message = won ? "You win!" : "Game over!";
-  var message = won ? "龙老师帅吗？！恭喜你！223个kiss from咩咩！！！" : (my_mark[score] || "再来一次！咩咩等你！");
-  //Adaption Close
-
-  this.messageContainer.classList.add(type);
-  this.messageContainer.getElementsByTagName("p")[0].textContent = message;
-};
-
-HTMLActuator.prototype.clearMessage = function () {
-  // IE only takes one value to remove at a time.
-  this.messageContainer.classList.remove("game-won");
-  this.messageContainer.classList.remove("game-over");
-};
