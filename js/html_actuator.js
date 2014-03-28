@@ -52,19 +52,25 @@ HTMLActuator.prototype.clearContainer = function (container) {
 };
 
 HTMLActuator.prototype.addTile = function (tile) {
-  var text = new Array();
-  text[1] = "龙少"
-  text[2] = "修几"
-  text[3] = "汪汪"
-  text[4] = "幼芽"
-  text[5] = "骆驼"
-  text[6] = "农民"
-  text[7] = "雫雫"
-  text[8] = "医生"
-  text[9] = "大树"
-  text[10] = "贝姆"
-  text[11] = "龙老师"
- 
+  var text=new Array(18);
+  text[0] = " ";
+  text[1] = "龙少";
+  text[2] = "修几";
+  text[3] = "汪汪";
+  text[4] = "幼芽";
+  text[5] = "骆驼";
+  text[6] = "雫雫";
+  text[7] = "医生";
+  text[8] = "大树";
+  text[9] = "贝姆";
+  text[10] = "龙老师";
+  text[11] = " ";
+  text[12] = " ";
+  text[13] = " ";
+  text[14] = " ";
+  text[15] = " ";
+  text[16] = " ";
+  text[17] = " ";
   var self = this;
   var text2 = function (n) { var r = 0; while (n > 1) r++, n >>= 1; return r; }
 
@@ -76,12 +82,12 @@ HTMLActuator.prototype.addTile = function (tile) {
   // We can't use classlist because it somehow glitches when replacing classes
   var classes = ["tile", "tile-" + tile.value, positionClass];
 
-  if (tile.value > 2048) classes.push("tile-super");
+  if (tile.value > 2084) classes.push("tile-super");
 
   this.applyClasses(wrapper, classes);
 
   inner.classList.add("tile-inner");
-  inner.textContent = text[text2(tile.value)];
+  inner.innerHTML = text[text2(tile.value)];
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
@@ -144,9 +150,9 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 };
 
 HTMLActuator.prototype.message = function (won) {
-  var mytxt=new Array(11);  
+  var mytxt=new Array(14);
   mytxt[0]="应该没有人会死在这里吧";
-  mytxt[1]="应该没有人会死在这里吧！死在这里的一定是幼芽亲妈！"；
+  mytxt[1]="应该没有人会死在这里吧！死在这里的一定是幼芽亲妈！"
   mytxt[2]="骆驼的Dior摸不到叻！";
   mytxt[3]="没有肉包子不开心";
   mytxt[4]="红酒配チョコ一口胖一斤";
@@ -154,7 +160,7 @@ HTMLActuator.prototype.message = function (won) {
   mytxt[6]="あ、俺俺、だから俺だよ";
   mytxt[7]="等不到情深深雨蒙蒙";
   mytxt[8]="窥伐到龙老师细哈耶则";
- 
+
 
   var text3 = function (m) { var r = 0; while (m > 1) r++, m >>= 1; return r; }
   var type    = won ? "game-won" : "game-over";
@@ -182,9 +188,9 @@ HTMLActuator.prototype.scoreTweetButton = function () {
   var tweet = document.createElement("a");
   tweet.classList.add("twitter-share-button");
   tweet.setAttribute("href", "https://twitter.com/share");
-  tweet.setAttribute("data-via", "aenonsun");
-  tweet.setAttribute("data-url", "http://aenon.github.io/Kame");
-  tweet.setAttribute("data-counturl", "http://aenon.github.io/Kame");
+  tweet.setAttribute("data-via", "oprilzeng");
+  tweet.setAttribute("data-url", "http://oprilzeng.github.io/2048/full");
+  tweet.setAttribute("data-counturl", "http://oprilzeng.github.io/2048/full/");
   tweet.textContent = "Tweet";
 
   var text = "I scored " + this.score + " points at life, a game where you " +
