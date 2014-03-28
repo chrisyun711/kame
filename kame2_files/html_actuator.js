@@ -153,7 +153,7 @@ HTMLActuator.prototype.message = function (won, score) {
   var type    = won ? "game-won" : "game-over";
   //Adaption Start
   //var message = won ? "You win!" : "Game over!";
-  var message = won ? "You win!" : (my_mark[score] || "Game over!");
+  var message = won ? "龙老师帅吗？！恭喜你！223个kiss from咩咩！！！" : (my_mark[score] || "再来一次！咩咩等你！");
   //Adaption Close
 
   this.messageContainer.classList.add(type);
