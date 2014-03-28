@@ -83,7 +83,7 @@ HTMLActuator.prototype.addTile = function (tile) {
     if(inner.textContent.substring(0,4)=='http'){
       inner.innerHTML = '<img src="'+inner.textContent+'" class="tile-inner"/>';
     }
-    inner.style.fontSize = (1/inner.textContent.length * 70)+ 'px';
+    inner.style.fontSize = (1/inner.textContent.length * 65)+ 'px';
     inner.style.fontFamily = '';
     inner.style.overflow = 'hidden';
   }
