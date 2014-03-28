@@ -146,15 +146,14 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 HTMLActuator.prototype.message = function (won) {
   var mytxt=new Array(11);  
   mytxt[0]="应该没有人会死在这里吧";
-  mytxt[1]="应该没有人会死在这里吧";
-  mytxt[2]="“应该没有人会死在这里吧！死在这里的一定是幼芽亲妈！"
-  mytxt[3]="骆驼的Dior摸不到叻！";
-  mytxt[4]="没有肉包子不开心";
-  mytxt[5]="红酒配チョコ一口胖一斤";
-  mytxt[6]="医生的功能磁共振排队哈长呀！";
-  mytxt[7]="あ、俺俺、だから俺だよ";
-  mytxt[8]="等不到情深深雨蒙蒙";
-  mytxt[9]="窥伐到龙老师细哈耶则";
+  mytxt[1]="“应该没有人会死在这里吧！死在这里的一定是幼芽亲妈！"
+  mytxt[2]="骆驼的Dior摸不到叻！";
+  mytxt[3]="没有肉包子不开心";
+  mytxt[4]="红酒配チョコ一口胖一斤";
+  mytxt[5]="医生的功能磁共振排队哈长呀！";
+  mytxt[6]="あ、俺俺、だから俺だよ";
+  mytxt[7]="等不到情深深雨蒙蒙";
+  mytxt[8]="窥伐到龙老师细哈耶则";
  
 
   var text3 = function (m) { var r = 0; while (m > 1) r++, m >>= 1; return r; }
