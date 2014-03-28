@@ -52,48 +52,29 @@ HTMLActuator.prototype.clearContainer = function (container) {
 };
 
 HTMLActuator.prototype.addTile = function (tile) {
- 
-  inner.classList.add("tile-inner");
-    switch (tile.value) {
-    case 2:
-      inner.textContent = "龙少";
-      break;
-    case 4:
-      inner.textContent = "修几";
-      break;
-    case 8:
-      inner.textContent = "汪汪";
-      break;
-    case 16:
-      inner.textContent = "幼芽";
-      break;
-    case 32:
-      inner.textContent = "骆驼";
-      break;
-    case 64:
-      inner.textContent = "农民";
-      break;
-    case 128:
-      inner.textContent = "雫雫";
-      break;
-    case 256:
-      inner.textContent = "医生";
-      break;
-    case 512:
-      inner.textContent = "大树";
-      break;
-    case 1024:
-      inner.textContent = "贝姆";
-      break;
-    case 2048:
-      inner.textContent = "龙老师";
-      break;
-    case 4096:
-      inner.textContent = "";
-      break;
-    }
+  
+  var text=new Array(18);
+  text[0] = " ";
+  text[1] = "龙少";
+  text[2] = "修几";
+  text[3] = "汪汪";
+  text[4] = "幼芽";
+  text[5] = "骆驼";
+  text[6] = "农民";
+  text[7] = "医生";
+  text[8] = "大树";
+  text[9] = "贝姆";
+  text[10] = "龙老师";
+  text[11] = " ";
+  text[12] = " ";
+  text[13] = " ";
+  text[14] = " ";
+  text[15] = " ";
+  text[16] = " ";
+  text[17] = " ";
   var self = this;
   var text2 = function (n) { var r = 0; while (n > 1) r++, n >>= 1; return r; }
+ 
   var inner     = document.createElement("div");
   var wrapper   = document.createElement("div");
   var position  = tile.previousPosition || { x: tile.x, y: tile.y };
